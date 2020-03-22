@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeApp.Common\EmployeeApp.Common.csproj" />
+    <ProjectReference Include="..\EmployeeApp.EFCore\EmployeeApp.EFCore.csproj" />
+    <ProjectReference Include="..\EmployeeApp.Entities\EmployeeApp.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
