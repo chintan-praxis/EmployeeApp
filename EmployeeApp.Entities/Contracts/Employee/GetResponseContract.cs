@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EmployeeApp.Entities.Contracts
+namespace EmployeeApp.Entities.Contracts.Employee
 {
-    public class EmployeeContract
+    public class GetResponseContract
     {
         public Guid Id { get; set; }
+
         public string Name { get; set; }
     }
 }
