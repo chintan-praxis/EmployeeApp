@@ -6,21 +6,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using EmployeeApp.MVC.Models;
+using System.Net.Http;
+using EmployeeApp.Common;
 
 namespace EmployeeApp.MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IHttpClientFactory httpClientFactory;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHttpClientFactory httpClientFactory, ConfigUI configUI) : base (configUI)
         {
-            _logger = logger;
+            this.httpClientFactory = httpClientFactory;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var client = httpClientFactory.CreateClient("");
+            var result = client.GetStringAsync("/");
+            return View(result);
         }
 
         public IActionResult Privacy()

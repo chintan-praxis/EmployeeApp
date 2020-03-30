@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EmployeeApp.EFCore.Repositories
 {
@@ -20,7 +21,7 @@ namespace EmployeeApp.EFCore.Repositories
             this.dbContext = dbContext;
         }
 
-        public EmployeeModel Delete(EmployeeModel obj)
+        public async Task<EmployeeModel> DeleteAsync(EmployeeModel obj)
         {
             EmployeeModel model = new EmployeeModel();
             var item = dbContext.Tb_Employees.Where(W => W.Id == obj.Id).FirstOrDefault();
@@ -28,28 +29,28 @@ namespace EmployeeApp.EFCore.Repositories
             {
                 model.Id = item.Id;
                 dbContext.Tb_Employees.Remove(item);
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
             return model;
         }
 
-        public EmployeeModel Get(EmployeeModel obj)
+        public async Task<EmployeeModel> GetAsync(EmployeeModel obj)
         {
-            EmployeeModel model = dbContext.Tb_Employees.Where(W => W.Id == obj.Id).Select(S => new EmployeeModel
+            EmployeeModel model = await dbContext.Tb_Employees.Where(W => W.Id == obj.Id).Select(S => new EmployeeModel
             {
                 Id = S.Id,
                 Name = S.Name
-            }).FirstOrDefault();
+            }).FirstOrDefaultAsync();
 
             return model;
         }
 
-        public IEnumerable<EmployeeModel> GetAll()
+        public async Task<List<EmployeeModel>> GetAllAsync()
         {
-            return dbContext.Tb_Employees.Select(S => new EmployeeModel { Id = S.Id, Name = S.Name }).AsEnumerable();
+            return await dbContext.Tb_Employees.Select(S => new EmployeeModel { Id = S.Id, Name = S.Name }).ToListAsync();
         }
 
-        public EmployeeModel Upsert(EmployeeModel obj)
+        public async Task<EmployeeModel> UpsertAsync(EmployeeModel obj)
         {
             EmployeeModel model = new EmployeeModel();
             if (obj.Id == Guid.Empty)
@@ -58,20 +59,20 @@ namespace EmployeeApp.EFCore.Repositories
                 tb_employee employee = new tb_employee();
                 employee.Id = Guid.NewGuid();
                 employee.Name = obj.Name;
-                dbContext.Tb_Employees.Add(employee);
+                await dbContext.Tb_Employees.AddAsync(employee);
             }
             else
             {
                 // Update
                 model.Id = obj.Id;
-                tb_employee employee = dbContext.Tb_Employees.Where(W => W.Id == obj.Id).FirstOrDefault();
-                if(employee != null)
+                tb_employee employee = await dbContext.Tb_Employees.Where(W => W.Id == obj.Id).FirstOrDefaultAsync();
+                if (employee != null)
                 {
                     employee.Name = obj.Name;
                 }
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             return model;
         }
     }

@@ -4,6 +4,7 @@ using EmployeeApp.Entities.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EmployeeApp.BusinessCore
 {
@@ -15,24 +16,24 @@ namespace EmployeeApp.BusinessCore
             this.repository = repository;
         }
 
-        public EmployeeModel Delete(EmployeeModel obj)
+        public Task<EmployeeModel> DeleteAsync(EmployeeModel obj)
         {
-            return repository.Delete(obj);
+            return repository.DeleteAsync(obj);
         }
 
-        public EmployeeModel Get(EmployeeModel obj)
+        public Task<EmployeeModel> GetAsync(EmployeeModel obj)
         {
-            return repository.Get(obj);
+            return repository.GetAsync(obj);
         }
 
-        public IEnumerable<EmployeeModel> GetAll()
+        public Task<List<EmployeeModel>> GetAllAsync()
         {
-            return repository.GetAll();
+            return repository.GetAllAsync();
         }
 
-        public EmployeeModel Upsert(EmployeeModel obj)
+        public Task<EmployeeModel> UpsertAsync(EmployeeModel obj)
         {
-            return repository.Upsert(obj);
+            return repository.UpsertAsync(obj);
         }
     }
 }

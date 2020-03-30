@@ -2,8 +2,11 @@
 
 namespace EmployeeApp.Common
 {
-    public class AppKeys
+    public static class AppKeys
     {
-      
+        public static string Client { get; set; }
+
     }
+
+
 }

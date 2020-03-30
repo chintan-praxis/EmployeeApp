@@ -38,6 +38,8 @@ namespace EmployeeApp.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            #region Swagger
+
             var swaggerOptions = new SwaggerOptions();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
 
@@ -50,6 +52,9 @@ namespace EmployeeApp.WebAPI
             {
                 options.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
             });
+
+            #endregion
+
 
             app.UseHttpsRedirection();
 

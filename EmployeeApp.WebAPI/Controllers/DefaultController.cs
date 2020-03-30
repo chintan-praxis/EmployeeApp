@@ -22,16 +22,16 @@ namespace EmployeeApp.WebAPI.Controllers
         }
 
         [HttpGet(EmployeeRoutes.GetAll)]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var getall = provider.GetAll().Select(S => new GetAllResponseContract { Id = S.Id, Name = S.Name }).ToList();
-            return Ok(getall);
+            var getallTask = await provider.GetAllAsync();
+            return Ok(getallTask.Select(S => new GetAllResponseContract { Id = S.Id, Name = S.Name }).ToList());
         }
 
         [HttpGet(EmployeeRoutes.Get)]
-        public IActionResult Get([FromRoute] Guid employeeId)
+        public async Task<IActionResult> Get([FromRoute] Guid employeeId)
         {
-            var employee = provider.Get(new EmployeeModel { Id = employeeId });
+            var employee = await provider.GetAsync(new EmployeeModel { Id = employeeId });
 
             if (employee == null)
                 return NotFound();
@@ -41,7 +41,7 @@ namespace EmployeeApp.WebAPI.Controllers
 
 
         [HttpPut(EmployeeRoutes.Update)]
-        public IActionResult Update([FromRoute] Guid employeeId, [FromBody] UpsertRequestContract request)
+        public async Task<IActionResult> Update([FromRoute] Guid employeeId, [FromBody] UpsertRequestContract request)
         {
             var employee = new EmployeeModel()
             {
@@ -49,7 +49,7 @@ namespace EmployeeApp.WebAPI.Controllers
                 Name = request.Name
             };
 
-            var updated = provider.Upsert(employee);
+            var updated = await provider.UpsertAsync(employee);
             if (updated.Id != Guid.Empty)
                 return Ok();
             else
@@ -57,11 +57,11 @@ namespace EmployeeApp.WebAPI.Controllers
         }
 
         [HttpPost(EmployeeRoutes.Create)]
-        public IActionResult Create([FromBody] UpsertRequestContract request)
+        public async Task<IActionResult> Create([FromBody] UpsertRequestContract request)
         {
             var employee = new EmployeeModel { Name = request.Name };
 
-            var created = provider.Upsert(employee);
+            var created = await provider.UpsertAsync(employee);
             if (created.Id != Guid.Empty)
                 return Ok(created.Id);
             else
@@ -69,9 +69,9 @@ namespace EmployeeApp.WebAPI.Controllers
         }
 
         [HttpDelete(EmployeeRoutes.Delete)]
-        public IActionResult Delete([FromRoute] Guid employeeId)
+        public async Task<IActionResult> Delete([FromRoute] Guid employeeId)
         {
-            var deleted = provider.Delete(new EmployeeModel { Id = employeeId });
+            var deleted = await provider.DeleteAsync(new EmployeeModel { Id = employeeId });
             if (deleted.Id != Guid.Empty)
                 return Ok();
             else
